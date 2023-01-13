@@ -104,6 +104,8 @@ return require("telescope").register_extension {
         -- pass
     end,
     exports = {
-        clashrsctl = list_proxies,
+        clashrsctl = function (opts)
+            list_proxies(opts):find()
+        end,
     }
 }
