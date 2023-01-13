@@ -32,7 +32,6 @@ end
 M.get_proxy_list = function ()
     local executable = M.get_executable()
     local command = "proxy list"
-    print(executable .. command)
     local fd = io.popen(executable .. command, "r")
     local ret = {}
     for line in fd:lines() do
