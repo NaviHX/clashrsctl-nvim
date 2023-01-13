@@ -29,7 +29,7 @@ local list_proxies = function (opts)
                 local selected_name = selected.value.name
                 local list = {}
                 local n = 0
-                local gen_map = clashrsctl_telescope_config.picker_gen_map[selected.type]
+                local gen_map = clashrsctl_telescope_config.picker_gen_map[selected.value.type]
                 if gen_map == nil then
                     vim.notify("No available operations")
                     return
@@ -58,6 +58,7 @@ local list_proxies = function (opts)
                             local picker_gen = selected.value[2]
                             picker_gen(selected_name, opts):find()
                         end)
+                        return true
                     end
                 }):find()
             end)
@@ -86,7 +87,9 @@ local select_new_proxy = function (selector, opts)
                 actions.close(prompt_bufnr)
                 local selection = action_state.get_selected_entry()
                 clashrsctl.change_selected_proxy(selector, selection.value.name)
+                vim.notify(string.format("%s Change: %s", selector, selection.value.name))
             end)
+            return true
         end
     })
 end
