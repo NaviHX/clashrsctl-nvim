@@ -1,21 +1,7 @@
 local M = {}
 
-M.ip = nil
-M.port = nil
-M.delay = 500
-M.url = "http://google.com"
-
-
 M.get_executable = function ()
-    local ip, port
-    if M.ip == nil then
-        ip = ""
-    end
-    if M.port == nil then
-        port = ""
-    end
-
-    return "clashrs-ctl " .. ip .. " " .. port .. " "
+    return string.format("clashrs-ctl -a %s -p %d ", Clash_ip, Clash_port)
 end
 
 M.parse_proxy = function (line)
@@ -51,8 +37,9 @@ end
 
 M.delay_test = function(proxy)
     local executable = M.get_executable()
-    local command = string.format("proxy delay %s %s %d", proxy, M.url, M.delay)
+    local command = string.format("proxy delay %s %s %d", proxy, Clash_url, Clash_delay)
 
+    vim.notify(executable .. command)
     local fd = io.popen(executable .. command, "r")
     local ret = fd:read()
 
@@ -64,10 +51,10 @@ M.delay_test = function(proxy)
 end
 
 M.setup = function (opts)
-    M.ip = opts.ip
-    M.port = opts.port
-    M.delay = opts.delay or 500
-    M.url = opts.url or "http://google.com"
+    Clash_ip = opts.ip or "127.0.0.1"
+    Clash_port = opts.port or 9090
+    Clash_delay = opts.delay or 500
+    Clash_url = opts.url or "http://google.com"
 end
 
 return M
