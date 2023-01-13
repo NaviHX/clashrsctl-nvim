@@ -2,6 +2,9 @@ local M = {}
 
 M.ip = nil
 M.port = nil
+M.delay = nil
+M.url = nil
+
 
 M.get_executable = function ()
     local ip, port
@@ -16,9 +19,10 @@ M.get_executable = function ()
 end
 
 M.parse_proxy = function (line)
-    local sep = string.find(line, ": ")
+    local sep = string.find(line, ": \"")
     local proxy = string.sub(line, 1, sep - 1)
-    local type = string.sub(line, sep + 2)
+    local type_orig = string.sub(line, sep + 2)
+    local type = string.gsub(type_orig, "\"", "")
     return {
         name = proxy,
         type = type,
@@ -49,6 +53,8 @@ end
 M.setup = function (opts)
     M.ip = opts.ip
     M.port = opts.port
+    M.delay = opts.delay or 500
+    M.url = opts.url or "http://google.com"
 end
 
 return M
