@@ -2,8 +2,8 @@ local M = {}
 
 M.ip = nil
 M.port = nil
-M.delay = nil
-M.url = nil
+M.delay = 500
+M.url = "http://google.com"
 
 
 M.get_executable = function ()
@@ -47,6 +47,20 @@ M.change_selected_proxy = function (selector, new_proxy)
 
     local suc, _, _ = os.execute(executable .. command)
     return suc
+end
+
+M.delay_test = function(proxy)
+    local executable = M.get_executable()
+    local command = string.format("proxy delay %s %s %d", proxy, M.url, M.delay)
+
+    local fd = io.popen(executable .. command, "r")
+    local ret = fd:read()
+
+    if ret == nil or string.len(ret) == 0 then
+        ret = "TimeOut"
+    end
+
+    return ret
 end
 
 M.setup = function (opts)
